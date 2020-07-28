@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/themes/redmond/jquery-ui.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.4/css/ui.jqgrid.min.css">
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.4/jquery.jqgrid.min.js"></script>
+
+<!--    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static',filename='styles/ui.jqgrid.css') }}" />-->
+
+      <script src="{{ url_for('static',filename='JsFiles/FormJs.js') }}"></script>
+
+<!--    <script src="{{  url_for('static',filename='azure-storage-blob.min.js') }}" charset="utf-8"></script>-->
+            <script src="{{  url_for('static',filename='azure-storage-blob.js') }}" charset="utf-8"></script>
+
+<style>
+    .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default
+    {
+        background: black !important;
+        border: 1px solid #2e3235 !important;
+
+        color: #ffffff !important;
+         font-size: 12px;
+
+    }
+
+    .ui-jqgrid>.ui-jqgrid-view>.ui-jqgrid-hdiv
+    {
+            height: 27px !important;
+    }
+    .ui-widget-content
+    {
+        background: #e0e0e0 !important;
+        font-style: italic !important;
+        font-size: 13px !important;
+        border: 1px solid #121213 !important;
+    }
+    body
+    {
+        background-color: #848181;
+    }
+
+</style>
+
+
+
+</head>
+<body>
+
+<div class="jumbotron text-center" style="margin-bottom:-18;padding-top: 20px;background-color:black">
+
+    <div class="form-inline col-sm-12">
+        <div class="form-group mr-8">
+            <button class="btn btn-warning pull-left" onMouseOver="this.style.background='#63f967'" onmouseout="this.style.background='white'" style="background-color:white;color:black" disabled id="prevbtn"><< Previous</button>
+        </div>
+    <div class="form-group mr-8">
+        <input type="text" style="width: 500px;" class="form-control" id="SasId" placeholder="Enter SAS URL" value="DefaultEndpointsProtocol=https;AccountName=checklistform;AccountKey=dpZeiTIELCgVGxRxqYkhqAx42b8pWND2onchJ83+yXgHqbkMkPS5aKbmmVMtdDJdENFmmH3EuHhANmUQ02d7TQ==;EndpointSuffix=core.windows.net">
+    </div>
+    <div class="form-group mr-2">
+
+        <select id="ContainerId" class="form-control" style="width: 200px;">
+            <option value="analizedforms">Analysed</option>
+            <option value="editedjson">Edited</option>
+        </select>
+
+    </div>
+    <div class="form-group mr-2">
+        <button id="GetBlob"  type="submit" class="btn btn-secondary">Get</button>
+    </div>
+     <div class="form-group mr-8">
+        <input list="FormList" name="myBrowser" style="width: 280px;margin-left: 60px;" class="form-control" id="SearchForm" placeholder="Search Form"/>
+        <datalist id="FormList">
+        </datalist>
+    </div>
+
+        <div class="form-group mr-8">
+            <button class="btn btn-warning  pull-right" onMouseOver="this.style.background='#63f967'" onmouseout="this.style.background='white'" style="background-color:white;color:black" disabled id="nextBtn">Next >></button>
+       </div>
+
+</div>
+<br>
+
+
+<div class="form-inline col-sm-12">
+    <div class="form-group mr-2">
+        <label class="btn  pull-right" id="FormNoLbl" style="color:white">0 of 0</label>
+    </div>
+</div>
+
+</div>
+<div class="container" style="margin-top:-30px">
+    <center><h3><label id="FileName"></label></h3></center>
+    <br>
+  <div class="row">
+    <div class="col-sm-4">
+      <iframe  id="formImg"  height="420" width="350" style="border:none;" ></iframe>
+<!--    <embed id="formImg" src="http://www.web-source.net" width="400" height="460"> </embed>-->
+    </div>
+    <div class="col-sm-8">
+   <div name="jqGridPager"  class="jqGridPager" id="jqGridPager"></div>
+
+  <table id="jqGrid"> </table>
+
+    </div>
+  </div>
+</div>
+<br>
+<div class="jumbotron text-center" style="background-color:black;margin-bottom:0px;padding-top:0px;padding-bottom:0px">
+  <p></p>
+</div>
+
+</body>
+</html>
