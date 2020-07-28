@@ -114,16 +114,11 @@ def UpdateJsonToBlob():
     print(result)
     dataList={}
     resp=listtodict(resp,dataList)
-    print(resp['answer'])
     result['analyzeResult']['documentResults'][0]['fields'][resp['Labels']]['text'] = resp['answer']
     result['analyzeResult']['documentResults'][0]['fields'][resp['Labels']]['valueString'] = resp['answer']
     EditedResult=result
     blob_client = blob_service_client.get_container_client("editedjson")
     blob_client.upload_blob(fileName, json.dumps(result), overwrite=True)
-
-    print(resp)
-    print(resp['Labels'])
-
     return resp
 
 def get_key(fields,val):
