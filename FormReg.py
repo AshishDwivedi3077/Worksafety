@@ -12,6 +12,10 @@ def listtodict(A, dic):
 @app.route("/")
 def home():
     return render_template("Index.html")
+
+@app.route("/DashBoard")
+def DashBoard():
+    return render_template("DashBoard.html")
 # Load Grid ===========================================================================================================================
 JsonResult=None
 
@@ -86,24 +90,105 @@ def LoadGridFromBlob():
                 q.append(Name)
                 a.append(NameValue)
             else:
-                result['analyzeResult']['documentResults'][0]['fields']['answer' + str(i)] = {'type': 'string',
-                                                                                              'valueString': '✔',
-                                                                                              'text': '✔', 'page': 1,
-                                                                                              'boundingBox': [],
-                                                                                              'confidence': 0,
-                                                                                              'elements': []}
+                    result['analyzeResult']['documentResults'][0]['fields']['answer' + str(i)] = {'type': 'string',
+                                                                                                  'valueString': 'Y',
+                                                                                                  'text': 'Y',
+                                                                                                  'page': 1,
+                                                                                                  'boundingBox': [],
+                                                                                                  'confidence': 0,
+                                                                                                  'elements': []}
 
-                Name = get_key(fields,Name)
-                NameValue = result['analyzeResult']['documentResults'][0]['fields']['answer' + str(i)]['text']
-                q.append(Name)
-                a.append(NameValue)
+                    NameValue = result['analyzeResult']['documentResults'][0]['fields']['answer' + str(i)]['text']
+                    q.append('answer' + str(i))
+                    a.append(NameValue)
 
     # a_file = open("templates/JsonData/Result-WorkspaceInspection"+ str(resp['page']) +".json", "w")
     # json.dump(result, a_file)
     # a_file.close()
 
     finalData = dict(zip(q, a))
+
     return finalData
+
+
+@app.route("/GetAllBlob",methods=['GET','POST'])
+def GetAllBlob():
+    resp = request.form
+
+    blob_service_clients = BlobServiceClient.from_connection_string(resp['ConnectionStr'])
+
+    container_client = blob_service_clients.get_container_client(resp["Container"])
+    analysed_Json = []
+    q = []
+    a = []
+    blob_list = container_client.list_blobs()
+    for blob in blob_list:
+        analysed_Json.append(blob.name)
+        fileName = analysed_Json[0]
+
+    download_stream = container_client.download_blob(fileName)
+    jsonData = download_stream.readall()
+    result = json.loads(jsonData)
+    fields = result['analyzeResult']['documentResults'][0]['fields']
+    l = len(analysed_Json)
+    finalData = {}
+    for l in range(0, l, 1):
+        for i in range(1, 19, 1):
+            if i != 14:
+                Name = result['analyzeResult']['documentResults'][0]['fields']['question' + str(i)]
+                Name = get_key(fields, Name)
+                NameValue = result['analyzeResult']['documentResults'][0]['fields']['question' + str(i)]['text']
+                q.append(Name)
+                a.append(NameValue)
+
+        for s in range(1, 19, 1):
+            Name = result['analyzeResult']['documentResults'][0]['fields']['answer' + str(s)]
+
+            if Name != None:
+
+                Name = get_key(fields, Name)
+                NameValue = result['analyzeResult']['documentResults'][0]['fields']['answer' + str(s)]['text']
+                q.append(Name)
+                a.append(NameValue)
+            else:
+                result['analyzeResult']['documentResults'][0]['fields']['answer' + str(s)] = {'type': 'string',
+                                                                                              'valueString': 'Y',
+                                                                                              'text': 'Y',
+                                                                                              'page': 1,
+                                                                                              'boundingBox': [],
+                                                                                              'confidence': 0,
+                                                                                              'elements': []}
+                NameValue = result['analyzeResult']['documentResults'][0]['fields']['answer' + str(s)]['text']
+                q.append('answer' + str(s))
+                a.append(NameValue)
+
+        finalData[analysed_Json[l]] = (dict(zip(q, a)))
+
+    # JobDescription,HMT,Lightning,Noise =[],[],[],[]
+    JobDescription = []
+    HMT = []
+    Lighting = []
+    Noise = []
+
+    for l in range(0, 6, 1):
+        data = finalData[analysed_Json[l]]
+        for i in range(1, 5, 1):
+            JobDescription.append(data['answer' + str(i)])
+
+        for i in range(6, 10, 1):
+            HMT.append(data['answer' + str(i)])
+
+        for i in range(11, 15, 1):
+            Lighting.append(data['answer' + str(i)])
+
+        for i in range(16, 19, 1):
+            Noise.append(data['answer' + str(i)])
+
+    Category = ["JobDescription", "HMT", "Lighting", "Noise"]
+    Checked = [JobDescription.count('Y'), HMT.count('Y'), Lighting.count('Y'), Noise.count('Y')]
+    ChartData = (dict(zip(Category, Checked)))
+
+    return ChartData
 
 
 @app.route("/UpdateJsonToBlob",methods=['POST'])
