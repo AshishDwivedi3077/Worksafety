@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/material.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/kelly.js"></script>
+
+    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+    <script src="{{ url_for('static',filename='JsFiles/DashBoard.js') }}"></script>
+
+<style>
+#Spiderchartdiv {
+  width: 100%;
+  height: 500px;
+}
+
+
+#Gaugechartdiv {
+  width: 100%;
+  height: 500px;
+}
+
+#Barchartdiv {
+  width: 60%;
+  height: 500px;
+margin-left:180px
+
+}
+body
+    {
+        background-color: #b5b5b5;
+    }
+center
+{
+    color:white
+}
+
+</style>
+</head>
+<body>
+<div class="jumbotron" style="margin-bottom:0; padding-bottom: 0px;padding-top: 0px;background-color:black">
+ <a class="" href="#">
+     <img src="https://myworld.birlasoft.com/assets/images/custom/Birlasoft-Logo.png"  alt="">
+ </a>
+</div>
+
+
+
+
+
+
+<div id="Spiderchartdiv"></div>
+<br>
+<br>
+<div id="Barchartdiv"></div>
+
+<br>
+<br>
+<div id="Gaugechartdiv"></div>
+
+</body>
+</html>
