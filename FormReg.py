@@ -49,10 +49,6 @@ def LoadGridFromBlob():
 
     q = []
     a = []
-    q.append("FileName");
-    # a.append(analysed_Json[int(resp['page'])])
-    a.append(analysed_Json)
-
     Name = result['analyzeResult']['documentResults'][0]['fields']['Name']
     Name = get_key(fields,Name)
     NameValue = result['analyzeResult']['documentResults'][0]['fields']['Name']['text']
@@ -71,14 +67,13 @@ def LoadGridFromBlob():
     q.append(Name)
     a.append(NameValue)
 
-    for i in range(1, 14, 1):
-        Name = result['analyzeResult']['documentResults'][0]['fields']['question' + str(i)]
-        Name = get_key(fields,Name)
-        NameValue = result['analyzeResult']['documentResults'][0]['fields']['question' + str(i)]['text']
-        q.append(Name)
-        a.append(NameValue)
-
-
+    for i in range(1, 19, 1):
+            if i != 14:
+                Name = result['analyzeResult']['documentResults'][0]['fields']['question' + str(i)]
+                Name = get_key(fields,Name)
+                NameValue = result['analyzeResult']['documentResults'][0]['fields']['question' + str(i)]['text']
+                q.append(Name)
+                a.append(NameValue)
 
     for i in range(1, 19, 1):
         Name = result['analyzeResult']['documentResults'][0]['fields']['answer' + str(i)]
@@ -99,16 +94,26 @@ def LoadGridFromBlob():
                                                                                                   'elements': []}
 
                     NameValue = result['analyzeResult']['documentResults'][0]['fields']['answer' + str(i)]['text']
-                    q.append('answer' + str(i))
-                    a.append(NameValue)
-
-    # a_file = open("templates/JsonData/Result-WorkspaceInspection"+ str(resp['page']) +".json", "w")
-    # json.dump(result, a_file)
-    # a_file.close()
+            q.append('answer' + str(i))
+            a.append(NameValue)
 
     finalData = dict(zip(q, a))
 
-    return finalData
+    GridList = {}
+    data2 = []
+
+    data2.append({'id': "1", 'Labels': "Name", 'question': "Name", 'answer': finalData['Name']})
+    data2.append({'id': "2", 'Labels': "Company", 'question': "Company", 'answer': finalData['Company']})
+    data2.append(
+        {'id': "3", 'Labels': "Employee Code", 'question': "Employee Code", 'answer': finalData['Employee Code']})
+    for d in range(1, 19, 1):
+        if d != 14:
+            data2.append({'id': "" + str(d), 'Labels': "answer" + str(d), 'question': finalData['question' + str(d)],
+                          'answer': finalData['answer' + str(d)]})
+    GridList["FileName"] = analysed_Json
+    GridList['GridData'] = data2
+    print(GridList)
+    return GridList
 
 
 @app.route("/GetAllBlob",methods=['GET','POST'])
