@@ -62,37 +62,15 @@ var JobDesign={};
 var HMT={};
 var Lighting={};
 var Noise={};
-function showGrid(dd)
+function showGrid(Griddata)
 {
-            var mydata = [
-               { id: "1", Labels:"Name", question: "Name",answer: JSON.stringify(dd.Name).slice(1, -1)},
-               { id: "2",Labels:"Company", question: "Company",answer: JSON.stringify(dd.Company).slice(1, -1)},
-               { id: "3",Labels:"Employee Code",  question: "Employee Code",answer: JSON.stringify(dd['Employee Code']).slice(1, -1)},
-               { id: "4",Labels:"answer1", question: JSON.stringify(dd.question1).slice(1, -1),answer: JSON.stringify(dd.answer1).slice(1, -1) },
-               { id: "5",Labels:"answer2",  question: JSON.stringify(dd.question2).slice(1, -1),answer: JSON.stringify(dd.answer2).slice(1, -1)},
-               { id: "6",Labels:"answer3",  question: JSON.stringify(dd.question3).slice(1, -1),answer: JSON.stringify(dd.answer3).slice(1, -1)},
-               { id: "7",Labels:"answer4",  question: JSON.stringify(dd.question4).slice(1, -1),answer: JSON.stringify(dd.answer4).slice(1, -1)},
-               { id: "8", Labels:"answer5", question: JSON.stringify(dd.question5).slice(1, -1),answer: JSON.stringify(dd.answer5).slice(1, -1)},
-               { id: "9",Labels:"answer6",  question: JSON.stringify(dd.question6).slice(1, -1),answer: JSON.stringify(dd.answer6).slice(1, -1)},
-               { id: "10", Labels:"answer7", question: JSON.stringify(dd.question7).slice(1, -1),answer: JSON.stringify(dd.answer7).slice(1, -1)},
-               { id: "11",Labels:"answer8",  question: JSON.stringify(dd.question8).slice(1, -1),answer: JSON.stringify(dd.answer8).slice(1, -1)},
-               { id: "12",Labels:"answer9",  question: JSON.stringify(dd.question9).slice(1, -1),answer: JSON.stringify(dd.answer9).slice(1, -1)},
-               { id: "13",Labels:"answer10",  question: JSON.stringify(dd.question10).slice(1, -1),answer: JSON.stringify(dd.answer10).slice(1, -1)},
-               { id: "14", Labels:"answer11", question: JSON.stringify(dd.question11).slice(1, -1),answer: JSON.stringify(dd.answer11).slice(1, -1)},
-               { id: "15", Labels:"answer12", question: JSON.stringify(dd.question12).slice(1, -1),answer: JSON.stringify(dd.answer12).slice(1, -1)},
-               { id: "17", Labels:"answer13", question: JSON.stringify(dd.question13).slice(1, -1),answer: JSON.stringify(dd.answer13).slice(1, -1)}]
-      // alert(JSON.stringify(mydata))
-       x=JSON.stringify(mydata)
-       console.log(x)
         $('#jqGrid').jqGrid('clearGridData');
-        $("#jqGrid").jqGrid('setGridParam', { data: mydata});
+        $("#jqGrid").jqGrid('setGridParam', { data: Griddata});
         $("#jqGrid").trigger('reloadGrid');
-        alert(mydata[0].id)
-
 
     $("#jqGrid").jqGrid({
         datatype: "local",
-        data: mydata,
+        data: Griddata,
         pager: '#jqGridPager',
         colModel: [
                     { label: 'No', name: 'id', width: 10, key:true ,hidden:true},
@@ -129,7 +107,7 @@ function showGrid(dd)
       autowidth:true,
        shrinkToFit:true,
 
-        rowList: [20, 40, 65, 70],
+        rowList: [15, 30, 45, 60],
          sortorder: "desc",
         gridview: true,
         autoencode: true,
@@ -137,7 +115,7 @@ function showGrid(dd)
         cellsubmit: 'clientArray',
         editurl: 'clientArray',
         viewrecords: true,
-        rowNum: 51,
+        rowNum: 15,
         emptyrecords: 'No records to display',
         jsonReader: {
             root: "rows",
@@ -193,6 +171,7 @@ function LoadGridFromBlob(CntStr,Container,blob)
             });
 
             $("#FileName").empty();
+
             if(blob=="")
             {
                $("#FileName").append(JSON.stringify(resp.FileName[0]).slice(1,-1));
@@ -203,7 +182,7 @@ function LoadGridFromBlob(CntStr,Container,blob)
                  $("#FileName").append(blob);
                  $('#formImg').attr('src', "https://checklistform.blob.core.windows.net/checklistfiles/"+ blob.slice(7, -5) + ".pdf");
             }
-            showGrid(resp)
+            showGrid(resp.GridData)
             $("#prevbtn").prop('disabled', false);
             $("#nextBtn").prop('disabled', false);
         },
@@ -214,23 +193,3 @@ function LoadGridFromBlob(CntStr,Container,blob)
         });
 }
 
-function GetAllBlob()
-{
-        var CntStr=$("#SasId").val();
-        var Container=$( "#ContainerId option:selected" ).val();
-
-        valu={"ConnectionStr":CntStr,"Container":Container,"blob":blob}
-            $.ajax({
-        url: 'GetAllBlob',
-        type: "POST",
-        data:valu,
-        async:false,
-        success: function(resp, textStatus, jqXHR) {
-
-         },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert('Nosdsd more files!');
-        }
-        });
-
-}
