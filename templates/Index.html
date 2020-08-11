@@ -20,10 +20,10 @@
 <style>
     .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default
     {
-        background: black !important;
-        border: 1px solid #2e3235 !important;
+        background: #d2cccc !important;
+        border: 1px solid #2d2cccc !important;
 
-        color: #ffffff !important;
+        color: black !important;
          font-size: 12px;
 
     }
@@ -34,14 +34,13 @@
     }
     .ui-widget-content
     {
-        background: #e0e0e0 !important;
+        background: white !important;
         font-style: italic !important;
         font-size: 13px !important;
-        border: 1px solid #121213 !important;
+        border: 1px solid #d2cccc !important;
     }
     body
     {
-        background-color: #848181;
     }
 
 </style>
@@ -50,12 +49,19 @@
 
 </head>
 <body>
+<div class="jumbotron" style="margin-bottom:0; padding-bottom: 0px;padding-top: 0px;background-color:#f1f1f1">
+ <a class="" href="#">
+     <img style="margin-left: 70px" src="https://myworld.birlasoft.com/assets/images/custom/Birlasoft-Logo.png"  alt="">
+ </a>
+    <a class="pull-right btn" href="DashBoard"><h4 style="color:red"><u>DashBoard</u></h4></a>
+</div>
 
-<div class="jumbotron text-center" style="margin-bottom:-18;padding-top: 20px;background-color:black">
+
+<div class="jumbotron text-center" style="margin-bottom:-18;padding-top: 0px;background-color:#fbf9f9">
 
     <div class="form-inline col-sm-12">
         <div class="form-group mr-8">
-            <button class="btn btn-warning pull-left" onMouseOver="this.style.background='#63f967'" onmouseout="this.style.background='white'" style="background-color:white;color:black" disabled id="prevbtn"><< Previous</button>
+            <button class="btn btn-success pull-left"  disabled id="prevbtn"><< Previous</button>
         </div>
     <div class="form-group mr-8">
         <input type="text" style="width: 500px;" class="form-control" id="SasId" placeholder="Enter SAS URL" value="DefaultEndpointsProtocol=https;AccountName=checklistform;AccountKey=dpZeiTIELCgVGxRxqYkhqAx42b8pWND2onchJ83+yXgHqbkMkPS5aKbmmVMtdDJdENFmmH3EuHhANmUQ02d7TQ==;EndpointSuffix=core.windows.net">
@@ -69,7 +75,7 @@
 
     </div>
     <div class="form-group mr-2">
-        <button id="GetBlob"  type="submit" class="btn btn-secondary">Get</button>
+        <button id="GetBlob"  type="submit" class="btn btn-primary">Get</button>
     </div>
      <div class="form-group mr-8">
         <input list="FormList" name="myBrowser" style="width: 280px;margin-left: 60px;" class="form-control" id="SearchForm" placeholder="Search Form"/>
@@ -78,7 +84,7 @@
     </div>
 
         <div class="form-group mr-8">
-            <button class="btn btn-warning  pull-right" onMouseOver="this.style.background='#63f967'" onmouseout="this.style.background='white'" style="background-color:white;color:black" disabled id="nextBtn">Next >></button>
+            <button class="btn btn-success  pull-right"  disabled id="nextBtn">Next >></button>
        </div>
 
 </div>
@@ -87,7 +93,7 @@
 
 <div class="form-inline col-sm-12">
     <div class="form-group mr-2">
-        <label class="btn  pull-right" id="FormNoLbl" style="color:white">0 of 0</label>
+        <label class="btn  pull-right" id="FormNoLbl" >0 of 0</label>
     </div>
 </div>
 
@@ -109,9 +115,9 @@
   </div>
 </div>
 <br>
-<a class="pull-right" href="DashBoard"><h4 style="color:white">DashBoard>></h4></a>
+
 <div class="jumbotron text-center" style="background-color:black;margin-bottom:0px;padding-top:0px;padding-bottom:0px">
-  <p></p>
+
 </div>
 
 </body>
