@@ -2,6 +2,8 @@ from flask import Flask, render_template,request,redirect
 import json
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 import os, uuid
+from collections import Counter
+
 
 app = Flask(__name__)
 
@@ -129,15 +131,20 @@ def GetAllBlob():
     blob_list = container_client.list_blobs()
     for blob in blob_list:
         analysed_Json.append(blob.name)
-        fileName = analysed_Json[0]
 
-    download_stream = container_client.download_blob(fileName)
-    jsonData = download_stream.readall()
-    result = json.loads(jsonData)
-    fields = result['analyzeResult']['documentResults'][0]['fields']
-    l = len(analysed_Json)
+    len_list = len(analysed_Json)
     finalData = {}
-    for l in range(0, l, 1):
+    UpdatedDate = []
+
+    for l in range(0, len_list, 1):
+
+        fileName = analysed_Json[l]
+        download_stream = container_client.download_blob(fileName)
+        jsonData = download_stream.readall()
+        result = json.loads(jsonData)
+        fields = result['analyzeResult']['documentResults'][0]['fields']
+
+        UpdatedDate.append(result['lastUpdatedDateTime'][0:-10])
         for i in range(1, 19, 1):
             if i != 14:
                 Name = result['analyzeResult']['documentResults'][0]['fields']['question' + str(i)]
@@ -175,24 +182,40 @@ def GetAllBlob():
     Lighting = []
     Noise = []
 
-    for l in range(0, 6, 1):
+    for l in range(0, l, 1):
         data = finalData[analysed_Json[l]]
         for i in range(1, 5, 1):
-            JobDescription.append(data['answer' + str(i)])
+            if 'answer' + str(i) in data:
+                JobDescription.append(data['answer' + str(i)])
 
         for i in range(6, 10, 1):
-            HMT.append(data['answer' + str(i)])
+            if 'answer' + str(i) in data:
+                HMT.append(data['answer' + str(i)])
 
         for i in range(11, 15, 1):
-            Lighting.append(data['answer' + str(i)])
+            if 'answer' + str(i) in data:
+                Lighting.append(data['answer' + str(i)])
 
         for i in range(16, 19, 1):
-            Noise.append(data['answer' + str(i)])
+            if 'answer' + str(i) in data:
+                Noise.append(data['answer' + str(i)])
 
     Category = ["JobDescription", "HMT", "Lighting", "Noise"]
     Checked = [JobDescription.count('Y'), HMT.count('Y'), Lighting.count('Y'), Noise.count('Y')]
-    ChartData = (dict(zip(Category, Checked)))
 
+    Category_total = ["JobDescription_total", "HMT_total", "Lighting_total", "Noise_total"]
+    Checked_total = [len(JobDescription), len(HMT), len(Lighting), len(Noise)]
+
+    date_ = list(set(UpdatedDate))
+    DateCount = []
+    for i in range(0, len(date_), 1):
+        DateCount.append({"date": date_[i], "steps": list(dict(Counter(UpdatedDate)).values())[i]})
+
+    output = ["Total", "Checked", "Date", "DateCountList"]
+    output_total = [dict(zip(Category_total, Checked_total)), (dict(zip(Category, Checked))), list(set(UpdatedDate)),
+                    DateCount]
+
+    ChartData = (dict(zip(output, output_total)))
     return ChartData
 
 
