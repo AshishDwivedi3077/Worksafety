@@ -1,6 +1,10 @@
 var count=0;
 
 $(document).ready(function(){
+//            $('#formImg').remove();
+           $('#formImg').hide();
+
+
     $("#GetBlob" ).click(function() {
     count=0;
     $('#SearchForm').val("")
@@ -155,6 +159,7 @@ var bloblist
 var bloblength;
 function LoadGridFromBlob(CntStr,Container,blob)
 {
+
         valu={"ConnectionStr":CntStr,"Container":Container,"blob":blob}
             $.ajax({
         url: 'LoadGridFromBlob',
@@ -171,20 +176,23 @@ function LoadGridFromBlob(CntStr,Container,blob)
             });
 
             $("#FileName").empty();
+            $('#formImg').show();
 
             if(blob=="")
             {
                $("#FileName").append(JSON.stringify(resp.FileName[0]).slice(1,-1));
-               $('#formImg').attr('src', "https://checklistform.blob.core.windows.net/checklistfiles/"+ (resp.FileName[0]).slice(7, -5) + ".pdf");
+               $('#formImg').attr('src', "https://checklistform.blob.core.windows.net/forms/"+ (resp.FileName[0]).slice(7, -5) + ".pdf".toLowerCase());
             }
             else
             {
                  $("#FileName").append(blob);
-                 $('#formImg').attr('src', "https://checklistform.blob.core.windows.net/checklistfiles/"+ blob.slice(7, -5) + ".pdf");
+                 $('#formImg').attr('src', "https://checklistform.blob.core.windows.net/forms/"+ blob.slice(7, -5) + ".pdf");
+
             }
             showGrid(resp.GridData)
             $("#prevbtn").prop('disabled', false);
             $("#nextBtn").prop('disabled', false);
+            $("#SearchForm").val("");
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert('No more files!');

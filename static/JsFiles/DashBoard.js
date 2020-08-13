@@ -68,7 +68,6 @@ am4core.useTheme(am4themes_animated);
 
 var chart = am4core.create("Barchartdiv", am4charts.XYChart);
 chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
-//alert(JSON.stringify(ChartData.DateCountList))
 chart.data =ChartData.DateCountList
 //[{'date': '2020-07-09', 'steps': 2},
 // {'date': '2020-07-26', 'steps': 4},
@@ -136,8 +135,8 @@ columnTemplate.strokeOpacity = 0;
 
 columnTemplate.adapter.add("fill", function (fill, target) {
     var dataItem = target.dataItem;
-    if (dataItem.valueY > 6000) {
-        return chart.colors.getIndex(0);
+    if (dataItem.valueY > 6) {
+        return chart.colors.getIndex(10);
     }
     else {
         return am4core.color("#a8b3b7");
@@ -149,8 +148,13 @@ cursor.behavior = "panX";
 chart.cursor = cursor;
 cursor.lineX.disabled = true;
 
+yr=ChartData.Date[0].slice(0,-6)
+mt=ChartData.Date[0].slice(5,-3)
+day=ChartData.Date[0].slice(8)
+
+//alert(yr +"  "+ mt +"  "+ day)
 chart.events.on("datavalidated", function () {
-    dateAxis.zoomToDates(new Date(2020, 6, 1), new Date(2020, 7, 1), false, true);
+    dateAxis.zoomToDates(new Date(yr, mt-1, day), new Date(yr, mt, day), false, true);
 });
 
 var middleLine = chart.plotContainer.createChild(am4core.Line);
@@ -186,7 +190,7 @@ var chart = am4core.create("Gaugechartdiv", am4charts.GaugeChart);
 chart.hiddenState.properties.opacity = 0; // this makes initial fade in effect
 
 chart.innerRadius = -80;
-max_val=ChartData.Total.JobDescription_total+ChartData.Total.JobDescription_total+ChartData.Total.JobDescription_total+ChartData.Total.JobDescription_total;
+max_val=100//ChartData.Total.JobDescription_total+ChartData.Total.JobDescription_total+ChartData.Total.JobDescription_total+ChartData.Total.JobDescription_total;
 var axis = chart.xAxes.push(new am4charts.ValueAxis());
 axis.min = 0;
 axis.max = max_val
@@ -207,14 +211,14 @@ var range1 = axis.axisRanges.create();
 range1.value = max_val/2;
 range1.endValue = max_val/(1.3);
 range1.axisFill.fillOpacity = 1;
-range1.axisFill.fill = colorSet.getIndex(2);
+range1.axisFill.fill = colorSet.getIndex(12);
 range1.axisFill.zIndex = -1;
 
 var range2 = axis.axisRanges.create();
 range2.value = max_val/(1.3);
 range2.endValue = max_val;
 range2.axisFill.fillOpacity = 1;
-range2.axisFill.fill = colorSet.getIndex(4);
+range2.axisFill.fill = colorSet.getIndex(10);
 range2.axisFill.zIndex = -1;
 
 var hand = chart.hands.push(new am4charts.ClockHand());
@@ -223,11 +227,11 @@ var hand = chart.hands.push(new am4charts.ClockHand());
 chart.setTimeout(randomValue, 2000);
 
 function randomValue() {
-    Checked=ChartData.Checked.JobDescription+ChartData.Checked.HMT+ChartData.Checked.Lighting+ChartData.Checked.Noise
+    Checked=((ChartData.Checked.JobDescription+ChartData.Checked.HMT+ChartData.Checked.Lighting+ChartData.Checked.Noise)/(ChartData.Total.JobDescription_total+ChartData.Total.JobDescription_total+ChartData.Total.JobDescription_total+ChartData.Total.JobDescription_total))*100
     hand.showValue(Checked, 1000, am4core.ease.cubicOut);
     chart.setTimeout(randomValue, 2000);
 }
-
+//alert(((ChartData.Checked.JobDescription+ChartData.Checked.HMT+ChartData.Checked.Lighting+ChartData.Checked.Noise)/(ChartData.Total.JobDescription_total+ChartData.Total.JobDescription_total+ChartData.Total.JobDescription_total+ChartData.Total.JobDescription_total))*100)
 
 
 
