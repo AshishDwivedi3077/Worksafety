@@ -70,7 +70,9 @@ def LoadGridFromBlob():
     a.append(NameValue)
 
     for i in range(1, 19, 1):
-            if i != 14:
+            if 'question' + str(i) in fields:
+
+            # if i != 14:
                 Name = result['analyzeResult']['documentResults'][0]['fields']['question' + str(i)]
                 Name = get_key(fields,Name)
                 NameValue = result['analyzeResult']['documentResults'][0]['fields']['question' + str(i)]['text']
@@ -109,7 +111,8 @@ def LoadGridFromBlob():
     data2.append(
         {'id': "3", 'Labels': "Employee Code", 'question': "Employee Code", 'answer': finalData['Employee Code']})
     for d in range(1, 19, 1):
-        if d != 14:
+        if 'question' + str(i) in finalData :
+            # if d != 14:
             data2.append({'id': "" + str(d), 'Labels': "answer" + str(d), 'question': finalData['question' + str(d)],
                           'answer': finalData['answer' + str(d)]})
     GridList["FileName"] = analysed_Json
@@ -146,6 +149,7 @@ def GetAllBlob():
 
         UpdatedDate.append(result['lastUpdatedDateTime'][0:-10])
         for i in range(1, 19, 1):
+            # if 'question' + str(i) in result['analyzeResult']['documentResults'][0]['fields']:
             if i != 14:
                 Name = result['analyzeResult']['documentResults'][0]['fields']['question' + str(i)]
                 Name = get_key(fields, Name)
@@ -212,7 +216,7 @@ def GetAllBlob():
         DateCount.append({"date": date_[i], "steps": list(dict(Counter(UpdatedDate)).values())[i]})
 
     output = ["Total", "Checked", "Date", "DateCountList"]
-    output_total = [dict(zip(Category_total, Checked_total)), (dict(zip(Category, Checked))), list(set(UpdatedDate)),
+    output_total = [dict(zip(Category_total, Checked_total)), (dict(zip(Category, Checked))), sorted(list(set(UpdatedDate))),
                     DateCount]
 
     ChartData = (dict(zip(output, output_total)))
