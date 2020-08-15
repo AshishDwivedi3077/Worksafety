@@ -254,7 +254,6 @@ def get_key(fields,val):
 @app.route("/AnalyseFIle",methods=['GET','POST'])
 def AnalyseFIle():
     resp = request.form
-    print(resp['ConnectionStr'])
     # blob_service_client = BlobServiceClient.from_connection_string('DefaultEndpointsProtocol=https;AccountName=checklistform;AccountKey=dpZeiTIELCgVGxRxqYkhqAx42b8pWND2onchJ83+yXgHqbkMkPS5aKbmmVMtdDJdENFmmH3EuHhANmUQ02d7TQ==;EndpointSuffix=core.windows.net')
     blob_service_client = BlobServiceClient.from_connection_string(resp['ConnectionStr'])
     endpoint = resp['Endpoint']# r"https://checklistformreader.cognitiveservices.azure.com"
@@ -268,74 +267,81 @@ def AnalyseFIle():
 
     global source
     global data_bytes
-
-    if filePath == '' :
-        print("url")
-        #---------URL-----------------
-        source=urlopen(resp['UrlPath'])
-        data_bytes=source.read()
-        blob_client.upload_blob(resp['filename'] + ".pdf", source, overwrite=True)
-
-    else:
-        #---------File Path-----------------
-        print("file")
-        source = resp['filePath']
-        with open(source, "rb") as f:
-            blob_client.upload_blob(resp['filename'] + ".pdf", f, overwrite=True)
-
-        with open(source, "rb") as f:
-            data_bytes = f.read()
-
-
-
-    # print(source)
-    params = {
-        "includeTextDetails": True
-    }
-    headers = {
-        # Request headers
-        'Content-Type': 'application/pdf',
-        'Ocp-Apim-Subscription-Key': apim_key,
-    }
-
-    # with open(source, "rb") as f:
-    #     data_bytes = f.read()
+    result="";
     try:
-        resp = post(url=post_url, data=data_bytes, headers=headers, params=params)
-        if resp.status_code != 202:
-            print("POST analyze failed:\n%s" % resp.json())
-            quit()
-        print("POST analyze succeeded:")
-        get_url = resp.headers["operation-location"]
-        n_tries = 9
-        n_try = 0
-        wait_sec = 5
-        max_wait_sec = 60
-        while n_try < n_tries:
-            resp_analised = get(url=get_url, headers={"Ocp-Apim-Subscription-Key": apim_key})
-            resp_json = resp_analised.json()
-            if resp_analised.status_code != 200:
-                print("GET analyze results failed:\n%s" % json.dumps(resp_json))
-            status = resp_json["status"]
-            if status == "succeeded":
-                print("Analysis succeeded:")
-                global AnaysedData
-                AnaysedData = json.dumps(resp_json)
 
-            if status == "failed":
-                print("Analysis failed:\n%s" % json.dumps(resp_json))
-            n_try += 1
+        if filePath == '' :
+            print("url")
+            #---------URL-----------------
+            source=urlopen(resp['UrlPath'])
+            data_bytes=source.read()
+            blob_client.upload_blob(resp['filename'] + '.pdf', source, overwrite=True)
 
-        #################--upload JSON--########################################
-        blob_client = blob_service_client.get_container_client("analizedforms")
+        else:
+            #---------File Path-----------------
+            print("file")
+            source = resp['filePath']
+            with open(source, "rb") as f:
+                blob_client.upload_blob(resp['filename'] + '.pdf', f, overwrite=True)
 
-        blob_client.upload_blob("Result-" + FileName + ".json", AnaysedData, overwrite=True)
+            with open(source, "rb") as f:
+                data_bytes = f.read()
 
-        print(AnaysedData)
+        params = {
+            "includeTextDetails": True
+        }
+        headers = {
+            # Request headers
+            'Content-Type': 'application/pdf',
+            'Ocp-Apim-Subscription-Key': apim_key,
+        }
+
+        # with open(source, "rb") as f:
+        #     data_bytes = f.read()
+        try:
+            resp = post(url=post_url, data=data_bytes, headers=headers, params=params)
+            if resp.status_code != 202:
+                print("POST analyze failed:\n%s" % resp.json())
+                quit()
+            print("POST analyze succeeded:")
+            get_url = resp.headers["operation-location"]
+            n_tries = 9
+            n_try = 0
+            wait_sec = 5
+            max_wait_sec = 60
+            while n_try < n_tries:
+                resp_analised = get(url=get_url, headers={"Ocp-Apim-Subscription-Key": apim_key})
+                resp_json = resp_analised.json()
+                if resp_analised.status_code != 200:
+                    print("GET analyze results failed:\n%s" % json.dumps(resp_json))
+                status = resp_json["status"]
+                if status == "succeeded":
+                    print("Analysis succeeded:")
+                    global AnaysedData
+                    AnaysedData = json.dumps(resp_json)
+                    result = "Analysis succeeded"
+
+                if status == "failed":
+                    result = "Analysis Failed"
+
+                    print("Analysis failed:\n%s" % json.dumps(resp_json))
+                n_try += 1
+
+            #################--upload JSON--########################################
+            blob_client = blob_service_client.get_container_client("analizedforms")
+
+            blob_client.upload_blob("Result-" + FileName + ".json", AnaysedData, overwrite=True)
+
+            print(AnaysedData)
+        except Exception as e:
+            result="Fail to analyse"
+            print("POST analyze failed:\n%s" % str(e))
+
     except Exception as e:
-        print("POST analyze failed:\n%s" % str(e))
+        result="Invaid File"
+        print("Invaid File:\n%s" % str(e))
 
-    return "Uploaded"
+    return result
 
 if __name__ == '__main__':
     app.run(debug=True)
