@@ -1,0 +1,81 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/themes/redmond/jquery-ui.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.4/css/ui.jqgrid.min.css">
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.4/jquery.jqgrid.min.js"></script>
+
+    <script src="{{ url_for('static',filename='JsFiles/AnalyseForm.js') }}"></script>
+
+<style>
+
+
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark static-top">
+            <div class="container">
+              <a class="navbar-brand" href="#">
+                    <img src="https://myworld.birlasoft.com/assets/images/custom/Birlasoft-Logo.png" alt="">
+                  </a>
+
+              <div class="navbar-collapse collapse show" id="navbarResponsive" style="" >
+                <ul class="navbar-nav ml-auto" hidden="hidden">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="#">Home
+                          <span class="sr-only">(current)</span>
+                        </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Services</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+<br>
+
+
+<div class="container">
+ <div class="form-group mr-8">
+     <label> SAS URL </label>
+        <input type="text" style="width: 500px;" class="form-control" id="SasId" placeholder="Enter SAS URL" value="DefaultEndpointsProtocol=https;AccountName=checklistform;AccountKey=dpZeiTIELCgVGxRxqYkhqAx42b8pWND2onchJ83+yXgHqbkMkPS5aKbmmVMtdDJdENFmmH3EuHhANmUQ02d7TQ==;EndpointSuffix=core.windows.net">
+ </div>
+    <div class="form-group mr-8">
+             <label> Endpoint </label>
+        <input type="text" style="width: 500px;" class="form-control" id="endpointId" placeholder="Enter SAS URL" value="https://checklistformreader.cognitiveservices.azure.com">
+ </div>
+    <div class="form-group mr-8">
+             <label> Apim key </label>
+        <input type="text" style="width: 500px;" class="form-control" id="ApimkeyId" placeholder="Enter SAS URL" value="e8e591d41a0b43bf8f21da161c204ad2">
+ </div>
+    <div class="form-group mr-8">
+             <label> Model ID </label>
+        <input type="text" style="width: 500px;" class="form-control" id="modelId" value="62a96766-80f6-4c23-867b-af07a527d9da">
+ </div>
+    <div class="form-group mr-8">
+             <label> PDF URL / PATH </label>
+        <input type="text" style="width: 500px;" class="form-control" id="fileId" placeholder="PDF URL / PATH" >
+ </div>
+        <div class="form-group mr-8">
+
+        <button class="btn btn-success" id="analysedBtn">Analyse</button>
+ </div>
+
+
+</div>
+</body>
+</html>
