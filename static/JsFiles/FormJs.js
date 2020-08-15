@@ -177,11 +177,10 @@ function LoadGridFromBlob(CntStr,Container,blob)
 
             $("#FileName").empty();
             $('#formImg').show();
-
             if(blob=="")
             {
                $("#FileName").append(JSON.stringify(resp.FileName[0]).slice(1,-1));
-               $('#formImg').attr('src', "https://checklistform.blob.core.windows.net/forms/"+ (resp.FileName[0]).slice(7, -5) + ".pdf".toLowerCase());
+               $('#formImg').attr('src', "https://checklistform.blob.core.windows.net/forms/"+ (resp.FileName[0]).slice(7, -5) + ".pdf");
             }
             else
             {

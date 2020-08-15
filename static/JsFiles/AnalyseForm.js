@@ -15,34 +15,27 @@ $(document).ready(function(){
           {
             filePath = Path_url;
             filename=filePath.replace(/^.*[\\\/]/, '').slice(0,-4)
-            alert(filename);
           }
           else
            {
            UrlPath=Path_url;
            filename=UrlPath.split('/').pop().slice(0,-4);
-            alert(filename);
            }
-
-            //var matches = filePath.replace(/^.*[\\\/]/, '')
-
-
-
-            //alert(filename1);
         var postData={"ConnectionStr":CntStr,"JsonContainer":JsonContainer,"PdfContainer":PdfContainer,"Endpoint":Endpoint,
         "ApimKey":ApimKey,"ModelID":ModelID,"filePath":filePath,"UrlPath":UrlPath,"filename":filename}
-//        alert(JSON.stringify(postData))
 
           $.ajax({
             url: 'AnalyseFIle',
             type: "POST",
             data: postData,
             success: function(resp, textStatus, jqXHR) {
-                alert('Updated successfully');
+
+                alert(resp);
+//                alert('Updated successfully');
                 $("#fileId").val("")
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                alert('Error occurred!');
+                alert('Error!');
                 $("#fileId").val("")
             }
             });
