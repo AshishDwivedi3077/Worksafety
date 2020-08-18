@@ -96,16 +96,23 @@
                       <label> Choose file or enter URL  </label>
     <div class="form-inline form-group  mr-8">
 
-         <div class="form-group mr-8">
-                 <input type = "file" name = "file"  class="form-control" name="file"  accept="application/pdf" style="width: 230px;" required/>
+        <div class="form-group mr-8">
+                 <select  name = "filetype" id="filetype" class="form-control"  style="width: 120px;" required>
+                     <option value="file">Local File</option>
+                     <option value="url">URL</option>
+                 </select>
     </div>
-        or
-    <div class="form-group mr-1">
-               <input type="text" style="width: 250px;margin-left:1px" class="form-control" id="fileId" placeholder="Paste ot type URL" ><br>
+
+         <div class="form-group">
+                 <input type = "file" name = "file"  class="form-control" id="fileId"  accept="application/pdf" style="width: 380px;display:block;" />
+    </div>
+
+    <div class="form-group">
+               <input type="text" name="url" style="width:380px;display:none;" class="form-control" id="urlId" placeholder="Paste ot type URL">
     </div>
      </div>
             <div class="form-group mr-8">
-            <button type="submit" class="btn btn-success" id="analysedBtn1">Analyse</button>
+            <button type="submit" class="btn btn-success" >Analyse</button>
      </div>
 
   </form>
