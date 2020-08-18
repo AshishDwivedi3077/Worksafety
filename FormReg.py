@@ -130,7 +130,7 @@ def LoadGridFromBlob():
                           'answer': finalData['answer' + str(d)]})
     GridList["FileName"] = analysed_Json
     GridList['GridData'] = data2
-    print(GridList)
+    # print(GridList)
     return GridList
 
 
@@ -317,11 +317,12 @@ def AnalyseFIle():
 
         resp = post(url=post_url, data=data_bytes, headers=headers, params=params)
         if resp.status_code != 202:
-            result="POST analyze failed"#print("POST analyze failed:\n%s" % resp.json())
+            result="POST analyze failed"#
+            # print("POST analyze failed:\n%s" % resp.json())
             quit()
         # print("POST analyze succeeded:")
         get_url = resp.headers["operation-location"]
-        n_tries = 15
+        n_tries = 9
         n_try = 0
         wait_sec = 5
         max_wait_sec = 60
@@ -333,6 +334,7 @@ def AnalyseFIle():
                 # print("GET analyze results failed:\n%s" % json.dumps(resp_json))
             status = resp_json["status"]
             if status == "succeeded":
+                # print("success")
                 global AnaysedData
                 AnaysedData = json.dumps(resp_json)
                 result = "Analysis succeeded"
@@ -346,7 +348,6 @@ def AnalyseFIle():
         #################--upload JSON--########################################
         blob_client = blob_service_client.get_container_client("analizedforms")
         blob_client.upload_blob("Result-" + filename[:-4] + ".json", AnaysedData, overwrite=True)
-
 
 
     except Exception as e:
