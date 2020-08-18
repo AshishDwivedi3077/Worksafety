@@ -321,7 +321,7 @@ def AnalyseFIle():
             quit()
         # print("POST analyze succeeded:")
         get_url = resp.headers["operation-location"]
-        n_tries = 9
+        n_tries = 15
         n_try = 0
         wait_sec = 5
         max_wait_sec = 60
