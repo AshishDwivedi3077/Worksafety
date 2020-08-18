@@ -312,9 +312,9 @@ def AnalyseFIle():
     try:
         resp = post(url=post_url, data=data_bytes, headers=headers, params=params)
         if resp.status_code != 202:
-            print("POST analyze failed:\n%s" % resp.json())
+            result="POST analyze failed"#print("POST analyze failed:\n%s" % resp.json())
             quit()
-        print("POST analyze succeeded:")
+        # print("POST analyze succeeded:")
         get_url = resp.headers["operation-location"]
         n_tries = 9
         n_try = 0
@@ -324,10 +324,10 @@ def AnalyseFIle():
             resp_analised = get(url=get_url, headers={"Ocp-Apim-Subscription-Key": apim_key})
             resp_json = resp_analised.json()
             if resp_analised.status_code != 200:
-                print("GET analyze results failed:\n%s" % json.dumps(resp_json))
+                result="GET analyze results failed"
+                # print("GET analyze results failed:\n%s" % json.dumps(resp_json))
             status = resp_json["status"]
             if status == "succeeded":
-                print("Analysis succeeded:")
                 global AnaysedData
                 AnaysedData = json.dumps(resp_json)
                 result = "Analysis succeeded"
@@ -336,7 +336,6 @@ def AnalyseFIle():
             if status == "failed":
                 result = "Analysis Failed"
 
-                print("Analysis failed:\n%s" % json.dumps(resp_json))
             n_try += 1
 
         #################--upload JSON--########################################
@@ -348,44 +347,15 @@ def AnalyseFIle():
         with open(source, "rb") as f:
             blob_client.upload_blob(filename[:-4] + '.pdf', f, overwrite=True)
 
-        print(AnaysedData)
     except Exception as e:
         result="Fail to analyse"
-        print("POST analyze failed:\n%s" % str(e))
 
     flash(result)
     os.remove("uploads/" + filename)
 
     return redirect('/analyseform')
 
-@app.route('/uploadfile', methods=['GET', 'POST'])
-def  upload_file():
-    message=""
 
-
-    if request.method == 'POST':
-        print(request.files)
-        print(request.form["endpointId"])
-        # print(request.modelId)
-
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            print('no file')
-
-        file = request.files['file']
-        print(file)
-        # if user does not select file, browser also
-        # submit a empty part without filename
-        if file.filename == '':
-            print('no filename')
-            message="Fail"
-
-        else:
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            print("saved file successfully")
-            message="saved file successfully"
-    return render_template("AnalysedForm.html")
 
 if __name__ == '__main__':
     app.run(debug=True)
