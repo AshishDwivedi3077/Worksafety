@@ -49,35 +49,66 @@
             </div>
           </nav>
 <br>
+<div class="container" style="min-height:100% width:80%" id="alertDiv">
+	{% with messages = get_flashed_messages() %}
+	  {% if messages %}
+	    {% for message in messages %}
+            {% if message =='Analysis succeeded' %}
+		  <div class="alert alert-success alert-dismissible" role="alert">
 
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+			{{message}}
+		  </div>
+         {% else %}
+         <div class="alert alert-danger alert-dismissible" role="alert">
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+			{{message}}
+		  </div>
+        {% endif %}
+
+
+		{% endfor %}
+	  {% endif %}
+	{% endwith %}
+
+	{% block body %}{% endblock %}
+	</div>
 
 <div class="container">
+     <form action = "/analysefIle" method = "POST" enctype = "multipart/form-data" >
+
  <div class="form-group mr-8">
      <label> SAS URL </label>
-        <input type="text" style="width: 500px;" class="form-control" id="SasId" placeholder="Enter SAS URL" value="DefaultEndpointsProtocol=https;AccountName=checklistform;AccountKey=dpZeiTIELCgVGxRxqYkhqAx42b8pWND2onchJ83+yXgHqbkMkPS5aKbmmVMtdDJdENFmmH3EuHhANmUQ02d7TQ==;EndpointSuffix=core.windows.net">
+        <input type="text" style="width: 500px;" class="form-control" name="SasID" id="SasId" placeholder="Enter SAS URL" value="DefaultEndpointsProtocol=https;AccountName=checklistform;AccountKey=dpZeiTIELCgVGxRxqYkhqAx42b8pWND2onchJ83+yXgHqbkMkPS5aKbmmVMtdDJdENFmmH3EuHhANmUQ02d7TQ==;EndpointSuffix=core.windows.net">
  </div>
     <div class="form-group mr-8">
              <label> Endpoint </label>
-        <input type="text" style="width: 500px;" class="form-control" id="endpointId" placeholder="Enter SAS URL" value="https://checklistformreader.cognitiveservices.azure.com">
+        <input type="text" style="width: 500px;" class="form-control" name="endpointId" id="endpointId" placeholder="Enter SAS URL" value="https://checklistformreader.cognitiveservices.azure.com">
  </div>
     <div class="form-group mr-8">
              <label> Apim key </label>
-        <input type="text" style="width: 500px;" class="form-control" id="ApimkeyId" placeholder="Enter SAS URL" value="e8e591d41a0b43bf8f21da161c204ad2">
+        <input type="text" style="width: 500px;" class="form-control" name="ApimkeyId" id="ApimkeyId" placeholder="Enter SAS URL" value="e8e591d41a0b43bf8f21da161c204ad2">
  </div>
     <div class="form-group mr-8">
              <label> Model ID </label>
-        <input type="text" style="width: 500px;" class="form-control" id="modelId" value="62a96766-80f6-4c23-867b-af07a527d9da">
+        <input type="text" style="width: 500px;" class="form-control" name="modelId" id="modelId" value="62a96766-80f6-4c23-867b-af07a527d9da">
  </div>
-    <div class="form-group mr-8">
-             <label> PDF URL / PATH </label>
-        <input type="text" style="width: 500px;" class="form-control" id="fileId" placeholder="PDF URL / PATH" >
- </div>
-        <div class="form-group mr-8">
+                      <label> PDF URL / PATH </label>
+    <div class="form-inline form-group  mr-8">
 
-        <button class="btn btn-success" id="analysedBtn">Analyse</button>
- </div>
+         <div class="form-group mr-8">
+                 <input type = "file" name = "file"  class="form-control" name="file"  accept="application/pdf" style="width: 230px;" required/>
+    </div>
+        or
+    <div class="form-group mr-1">
+               <input type="text" style="width: 250px;margin-left:1px" class="form-control" id="fileId" placeholder="URL" ><br>
+    </div>
+     </div>
+            <div class="form-group mr-8">
+            <button type="submit" class="btn btn-success" id="analysedBtn1">Analyse</button>
+     </div>
 
-
+  </form>
 </div>
 </body>
 </html>
