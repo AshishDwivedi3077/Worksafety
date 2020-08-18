@@ -7,6 +7,7 @@ from requests import get, post
 from collections import Counter
 from urllib.request import urlopen
 from werkzeug.utils import secure_filename
+import validators
 
 
 
@@ -261,7 +262,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @app.route("/analysefIle",methods=['GET','POST'])
 def AnalyseFIle():
 
-
     resp = request.form
     # blob_service_client = BlobServiceClient.from_connection_string('DefaultEndpointsProtocol=https;AccountName=checklistform;AccountKey=dpZeiTIELCgVGxRxqYkhqAx42b8pWND2onchJ83+yXgHqbkMkPS5aKbmmVMtdDJdENFmmH3EuHhANmUQ02d7TQ==;EndpointSuffix=core.windows.net')
     blob_service_client = BlobServiceClient.from_connection_string(resp['SasID'])
@@ -271,45 +271,50 @@ def AnalyseFIle():
     post_url = endpoint + "/formrecognizer/v2.0/custom/models/%s/analyze" % model_id
     blob_client = blob_service_client.get_container_client("forms")
     file = request.files['file']
-    filename = secure_filename(file.filename)
-    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    source = 'uploads/'+filename
-    with open(source, "rb") as f:
-        blob_client.upload_blob(filename + '.pdf', f, overwrite=True)
-
-
-    # global source
-    # global data_bytes
+    uurl = resp['url']
+    global filename
+    global source
+    global data_bytes
     result="";
 
-
-        # if filePath == '' :
-        #     print("url")
-        #     #---------URL-----------------
-        #     source=urlopen(resp['UrlPath'])
-        #     data_bytes=source.read()
-        #     blob_client.upload_blob(resp['filename'] + '.pdf', source, overwrite=True)
-        #
-        # else:
-        #     #---------File Path-----------------
-        #     print("file")
-        #     source = resp['filePath']
-        #     with open(source, "rb") as f:
-        #         blob_client.upload_blob(resp['filename'] + '.pdf', f, overwrite=True)
-
-
-    params = {
-        "includeTextDetails": True
-    }
-    headers = {
-        # Request headers
-        'Content-Type': 'application/pdf',
-        'Ocp-Apim-Subscription-Key': apim_key,
-    }
-
-    with open(source, "rb") as f:
-        data_bytes = f.read()
     try:
+        if uurl != '' :
+            if validators.url(resp['url'])==True:
+                filename=os.path.basename(resp['url'])
+                source=urlopen(resp['url'])
+                data_bytes=source.read()
+                blob_client.upload_blob(filename, source, overwrite=True)
+            else:
+                result="Invalid URL"
+                flash(result)
+                return redirect('/analyseform')
+
+
+        else:
+            #---------File Path-----------------
+
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            source = 'uploads/'+filename
+            with open(source, "rb") as f:
+                blob_client.upload_blob(filename[:-4] + '.pdf', f, overwrite=True)
+
+            with open(source, "rb") as f:
+                data_bytes = f.read()
+            os.remove("uploads/" + filename)
+
+        params = {
+            "includeTextDetails": True
+        }
+        headers = {
+            # Request headers
+            'Content-Type': 'application/pdf',
+            'Ocp-Apim-Subscription-Key': apim_key,
+        }
+
+
+
         resp = post(url=post_url, data=data_bytes, headers=headers, params=params)
         if resp.status_code != 202:
             result="POST analyze failed"#print("POST analyze failed:\n%s" % resp.json())
@@ -343,16 +348,11 @@ def AnalyseFIle():
         blob_client.upload_blob("Result-" + filename[:-4] + ".json", AnaysedData, overwrite=True)
 
 
-        blob_client = blob_service_client.get_container_client("forms")
-        with open(source, "rb") as f:
-            blob_client.upload_blob(filename[:-4] + '.pdf', f, overwrite=True)
 
     except Exception as e:
         result="Fail to analyse"
 
     flash(result)
-    os.remove("uploads/" + filename)
-
     return redirect('/analyseform')
 
 
