@@ -152,7 +152,7 @@ def GetAllBlob():
     len_list = len(analysed_Json)
     finalData = {}
     UpdatedDate = []
-
+#
     for l in range(0, len_list, 1):
 
         fileName = analysed_Json[l]
