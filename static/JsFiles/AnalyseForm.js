@@ -2,7 +2,7 @@ $(document).ready(function(){
 
 setTimeout(function() {
     $('#alertDiv').fadeOut('slow');
-}, 5000);
+}, 9000);
 
 
  $('#filetype').on('change', function() {
