@@ -1,6 +1,6 @@
 from flask import Flask, render_template, flash,request,redirect
 import json
-from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
+from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient, ContentSettings
 import os, uuid
 import time
 from requests import get, post
@@ -276,6 +276,7 @@ def AnalyseFIle():
     global source
     global data_bytes
     result="";
+    my_content_settings = ContentSettings(content_type='application/pdf')
 
     try:
         if uurl != '' :
@@ -283,7 +284,7 @@ def AnalyseFIle():
                 filename=os.path.basename(resp['url'])
                 source=urlopen(resp['url'])
                 data_bytes=source.read()
-                blob_client.upload_blob(filename, source, overwrite=True)
+                blob_client.upload_blob(filename, source, overwrite=True, content_settings=my_content_settings)
             else:
                 result="Invalid URL"
                 flash(result)
@@ -298,7 +299,7 @@ def AnalyseFIle():
 
             source = 'uploads/'+filename
             with open(source, "rb") as f:
-                blob_client.upload_blob(filename[:-4] + '.pdf', f, overwrite=True)
+                blob_client.upload_blob(filename, f, overwrite=True, content_settings=my_content_settings)
 
             with open(source, "rb") as f:
                 data_bytes = f.read()
@@ -322,7 +323,7 @@ def AnalyseFIle():
             quit()
         # print("POST analyze succeeded:")
         get_url = resp.headers["operation-location"]
-        n_tries = 9
+        n_tries = 7
         n_try = 0
         wait_sec = 5
         max_wait_sec = 60
