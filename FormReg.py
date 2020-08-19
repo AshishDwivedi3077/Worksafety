@@ -62,6 +62,7 @@ def LoadGridFromBlob():
     JsonResult=result
     fields = result['analyzeResult']['documentResults'][0]['fields']
 
+
     q = []
     a = []
     Name = result['analyzeResult']['documentResults'][0]['fields']['Name']
@@ -81,8 +82,8 @@ def LoadGridFromBlob():
     NameValue = result['analyzeResult']['documentResults'][0]['fields']['Company']['text']
     q.append(Name)
     a.append(NameValue)
-
-    for i in range(1, 19, 1):
+    
+    for i in range(1, len([x for x in fields if x.startswith('question')]), 1):
             if 'question' + str(i) in fields:
 
             # if i != 14:
@@ -92,7 +93,7 @@ def LoadGridFromBlob():
                 q.append(Name)
                 a.append(NameValue)
 
-    for i in range(1, 19, 1):
+    for i in range(1, len([x for x in fields if x.startswith('answer')]), 1):
         Name = result['analyzeResult']['documentResults'][0]['fields']['answer' + str(i)]
         for i in range(1, 19, 1):
             Name = result['analyzeResult']['documentResults'][0]['fields']['answer' + str(i)]
@@ -123,7 +124,7 @@ def LoadGridFromBlob():
     data2.append({'id': "2", 'Labels': "Company", 'question': "Company", 'answer': finalData['Company']})
     data2.append(
         {'id': "3", 'Labels': "Employee Code", 'question': "Employee Code", 'answer': finalData['Employee Code']})
-    for d in range(1, 19, 1):
+    for d in range(1, len([x for x in fields if x.startswith('question')]), 1):
         if 'question' + str(i) in finalData :
             # if d != 14:
             data2.append({'id': "" + str(d), 'Labels': "answer" + str(d), 'question': finalData['question' + str(d)],
@@ -161,7 +162,7 @@ def GetAllBlob():
         fields = result['analyzeResult']['documentResults'][0]['fields']
 
         UpdatedDate.append(result['lastUpdatedDateTime'][0:-10])
-        for i in range(1, 19, 1):
+        for i in range(1, len([x for x in fields if x.startswith('question')]), 1):
             # if 'question' + str(i) in result['analyzeResult']['documentResults'][0]['fields']:
             if i != 14:
                 Name = result['analyzeResult']['documentResults'][0]['fields']['question' + str(i)]
@@ -170,7 +171,7 @@ def GetAllBlob():
                 q.append(Name)
                 a.append(NameValue)
 
-        for s in range(1, 19, 1):
+        for s in range(1, len([x for x in fields if x.startswith('answer')]), 1):
             Name = result['analyzeResult']['documentResults'][0]['fields']['answer' + str(s)]
 
             if Name != None:
