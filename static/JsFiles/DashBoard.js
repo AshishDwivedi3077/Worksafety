@@ -9,7 +9,7 @@ var chart = am4core.create("Spiderchartdiv", am4charts.RadarChart);
         var Container="editedjson";
         valu={"ConnectionStr":CntStr,"Container":Container}
             $.ajax({
-        url: 'GetAllBlob',
+        url: 'getallblob',
         type: "POST",
         data:valu,
         async:false,

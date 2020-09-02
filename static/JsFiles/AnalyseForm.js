@@ -18,13 +18,3 @@ setTimeout(function() {
 }).change();
 
 });
-
-function ValidURL() {
-str="https://checklistform.blob.core.windows.net/forms/JhonSeldi_Workspace.pdf"
-  var regex = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
-  if(!regex .test(str)) {
-    alert("Please enter valid URL.");
-  } else {
-    alert("valid URL.");
-  }
-}
