@@ -112,12 +112,9 @@ def LoadGridFromBlob():
             value.append(NameValue)
 
     finalData = dict(zip(label, value))
-    print(finalData)
     GridList = {}
     data2 = []
-    print(k)
     for i in k:
-        print(i)
         if i != 'State':
             data2.append({'Label': "" + str(i), "Key": "" + str(i), 'Values': finalData[i]})
 
