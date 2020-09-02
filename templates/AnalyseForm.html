@@ -75,7 +75,7 @@
 	</div>
 
 <div class="container">
-     <form action = "/analysefIle" method = "POST" enctype = "multipart/form-data" >
+     <form action = "/analysefile" method = "POST" enctype = "multipart/form-data" >
 
  <div class="form-group mr-8">
      <label> SAS URL </label>
@@ -93,6 +93,15 @@
              <label> Model ID </label>
         <input type="text" style="width: 500px;" class="form-control" name="modelId" id="modelId" value="62a96766-80f6-4c23-867b-af07a527d9da">
  </div>
+      <div class="form-group mr-8">
+             <label> Project Conatiner Name </label>
+        <input type="text" style="width: 500px;" class="form-control" name="ProjectContainerName" id="ProjectContainerName" value="forms">
+ </div>
+
+            <div class="form-group mr-8">
+             <label> Analyse Conatiner Name </label>
+        <input type="text" style="width: 500px;" class="form-control" name="AnalyseContName" id="AnalyseContName" value="analizedforms">
+ </div>
                       <label> Choose file or enter URL  </label>
     <div class="form-inline form-group  mr-8">
 
@@ -104,7 +113,7 @@
     </div>
 
          <div class="form-group">
-                 <input type = "file" name = "file"  class="form-control" id="fileId"  accept="application/pdf" style="width: 380px;display:block;" />
+                 <input type = "file" name = "file"  class="form-control" id="fileId"  accept="application/pdf, image/jpeg" style="width: 380px;display:block;" />
     </div>
 
     <div class="form-group">
